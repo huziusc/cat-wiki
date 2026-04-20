@@ -2,30 +2,38 @@ import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
 /**
- * Quartz 4 Configuration
- *
- * See https://quartz.jzhao.xyz/configuration for more information.
+ * Cat Wiki — Quartz 4 Configuration
+ * 面向中文猫主人，大众向猫咪百科
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
-    pageTitleSuffix: "",
+    pageTitle: "🐱 Cat Wiki",
+    pageTitleSuffix: " · 猫咪百科",
     enableSPA: true,
     enablePopovers: true,
-    analytics: {
-      provider: "plausible",
-    },
-    locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
-    ignorePatterns: ["private", "templates", ".obsidian"],
+    analytics: null,
+    locale: "zh-CN",
+    baseUrl: "huzi.github.io/cat-wiki",
+    ignorePatterns: [
+      "private",
+      "templates",
+      "raw",
+      "scripts",
+      "methods",
+      "SCHEMA.md",
+      "log.md",
+      ".obsidian",
+      ".git",
+      "_Attachments",
+    ],
     defaultDateType: "modified",
     theme: {
-      fontOrigin: "googleFonts",
+      fontOrigin: "local",
       cdnCaching: true,
       typography: {
-        header: "Schibsted Grotesk",
-        body: "Source Sans Pro",
-        code: "IBM Plex Mono",
+        header: "system-ui, -apple-system, sans-serif",
+        body: "system-ui, -apple-system, sans-serif",
+        code: "monospace",
       },
       colors: {
         lightMode: {
@@ -82,14 +90,14 @@ const config: QuartzConfig = {
       Plugin.TagPage(),
       Plugin.ContentIndex({
         enableSiteMap: true,
-        enableRSS: true,
+        enableRSS: false,
       }),
       Plugin.Assets(),
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages(),
+      // Disabled: CustomOgImages requires Google Fonts setup
+      // Plugin.CustomOgImages(),
     ],
   },
 }
