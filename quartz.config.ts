@@ -13,7 +13,7 @@ const config: QuartzConfig = {
     enablePopovers: true,
     analytics: null,
     locale: "zh-CN",
-    baseUrl: "huzi.github.io/cat-wiki",
+    baseUrl: "huziusc.github.io/cat-wiki",
     ignorePatterns: [
       "private",
       "templates",
