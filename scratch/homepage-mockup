@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cat Wiki — 猫咪养育知识库</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ===== Design Tokens ===== */
+  :root {
+    --color-bg: #ffffff;
+    --color-bg-warm: #faf8f5;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5c5c5c;
+    --color-text-muted: #8a8a8a;
+    --color-accent: #E8985E;
+    --color-accent-light: #fef3e8;
+    --color-accent-deep: #b8703a;
+    --color-border: rgba(0,0,0,0.06);
+    --color-border-subtle: rgba(0,0,0,0.04);
+    --color-card-bg: #ffffff;
+    --color-card-hover: #fef3e8;
+    --color-success: #2a9d5c;
+    --color-warning: #d4782a;
+    --color-danger: #c44a3a;
+    --radius-pill: 9999px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 4px;
+    --space-section: 64px;
+    --space-card-padding: 24px;
+    --space-card-gap: 16px;
+    --shadow-card: rgba(0,0,0,0.03) 0px 2px 4px, rgba(0,0,0,0.02) 0px 1px 2px;
+    --shadow-card-hover: rgba(0,0,0,0.06) 0px 4px 12px, rgba(0,0,0,0.03) 0px 2px 4px;
+    --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-body: system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  /* ===== Reset ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Header ===== */
+  .site-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--color-border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .site-logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .site-logo-emoji { font-size: 1.3em; }
+  .site-nav { display: flex; gap: 20px; align-items: center; }
+  .site-nav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .site-nav a:hover { color: var(--color-accent); }
+  .site-nav-cta {
+    display: inline-block;
+    padding: 6px 16px;
+    background: var(--color-accent);
+    color: #fff !important;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .site-nav-cta:hover { background: var(--color-accent-deep); }
+
+  /* ===== Hero ===== */
+  .hero {
+    text-align: center;
+    padding: 72px 24px 48px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .hero-emoji {
+    font-size: 64px;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    color: var(--color-text-primary);
+    margin-bottom: 12px;
+  }
+  .hero-subtitle {
+    font-size: 17px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  /* ===== Search ===== */
+  .search-wrapper {
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .search-input {
+    width: 100%;
+    padding: 12px 20px 12px 48px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 15px;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    transition: all 0.2s;
+    outline: none;
+  }
+  .search-input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(232,152,94,0.15);
+  }
+  .search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--color-text-muted);
+  }
+
+  /* ===== Home Cards Grid ===== */
+  .home-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-card-gap);
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .home-card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-card-padding);
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    display: block;
+    cursor: pointer;
+  }
+  .home-card:hover {
+    border-color: var(--color-accent);
+    background: var(--color-card-hover);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+  .home-card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .home-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text-primary);
+  }
+  .home-card-desc {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .home-card-cta {
+    display: inline-block;
+    padding: 6px 20px;
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .home-card:hover .home-card-cta {
+    background: var(--color-accent-deep);
+  }
+
+  /* ===== About Section ===== */
+  .about-section {
+    max-width: 640px;
+    margin: 48px auto 80px;
+    padding: 0 24px;
+    text-align: center;
+  }
+  .about-card {
+    background: var(--color-bg-warm);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+  .about-card a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .about-card a:hover { color: var(--color-accent-deep); }
+
+  /* ===== Quick Links ===== */
+  .quick-links {
+    max-width: 640px;
+    margin: 0 auto 72px;
+    padding: 0 24px;
+  }
+  .quick-links h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .quick-link-card {
+    display: block;
+    text-decoration: none;
+    padding: 16px 12px;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: all 0.15s;
+    color: var(--color-text-primary);
+  }
+  .quick-link-card:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+  .quick-link-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .quick-link-label { font-size: 13px; font-weight: 500; }
+
+  /* ===== Footer ===== */
+  .site-footer {
+    border-top: 1px solid var(--color-border-subtle);
+    padding: 32px 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+  .site-footer a { color: var(--color-text-secondary); text-decoration: none; }
+  .site-footer a:hover { color: var(--color-accent); }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 24px 36px; }
+    .hero-title { font-size: 32px; }
+    .home-cards { grid-template-columns: 1fr; }
+    .quick-grid { grid-template-columns: repeat(2, 1fr); }
+    .site-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <a href="#" class="site-logo">
+    <span class="site-logo-emoji">🐱</span> Cat Wiki
+  </a>
+  <nav class="site-nav">
+    <a href="#">新手引导</a>
+    <a href="#">医疗健康</a>
+    <a href="#">日常养育</a>
+    <a href="#" class="site-nav-cta">开始探索</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-emoji">🐱</div>
+  <h1 class="hero-title">Cat Wiki</h1>
+  <p class="hero-subtitle">猫咪养育知识库 · 从新手到老手<br>基于实践，持续更新</p>
+
+  <!-- Search -->
+  <div class="search-wrapper">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input class="search-input" type="text" placeholder="搜索品种、疾病、药物...">
+  </div>
+</section>
+
+<!-- Home Cards -->
+<div class="home-cards">
+  <a class="home-card" href="#">
+    <div class="home-card-icon">🧑‍🏫</div>
+    <div class="home-card-title">新手引导</div>
+    <div class="home-card-desc">从选猫到第一个月 — 一步步带你成为合格猫家长。领养 vs 购买、品种介绍、接猫准备。</div>
+    <span class="home-card-cta">开始 →</span>
+  </a>
+  <a class="home-card" href="#">
+    <div class="home-card-icon">🧑‍🔧</div>
+    <div class="home-card-title">老手入口</div>
+    <div class="home-card-desc">医疗健康 · 日常养育 — 疫苗、疾病、用药、饮食、卫生...快速定位你需要的知识。</div>
+    <span class="home-card-cta">进入 →</span>
+  </a>
+</div>
+
+<!-- Quick Links -->
+<section class="quick-links">
+  <h3>快速入口</h3>
+  <div class="quick-grid">
+    <a class="quick-link-card" href="#">
+      <div class="quick-link-icon">🔴</div>
+      <div class="quick-link-label">急诊判断</div>
+    </a>
+    <a class="quick-link-card" href="#">
+      <div class="quick-link-icon">💉</div>
+      <div class="quick-link-label">疫苗计划</div>
+    </a>
+    <a class="quick-link-card" href="#">
+      <div class="quick-link-icon">🦷</div>
+      <div class="quick-link-label">口腔疾病</div>
+    </a>
+    <a class="quick-link-card" href="#">
+      <div class="quick-link-icon">🐱</div>
+      <div class="quick-link-label">多猫指南</div>
+    </a>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about-section">
+  <div class="about-card">
+    📝 <strong>关于本站：</strong>Cat Wiki 是基于养猫实践和育儿准备手册构建的猫咪养育知识库。
+    内容持续更新中。<a href="#">了解更多 →</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p>Cat Wiki · 猫咪养育知识库 · 内容持续更新</p>
+  <p style="margin-top:4px;"><a href="#">关于本站</a> · <a href="#">GitHub</a></p>
+</footer>
+
+</body>
+</html>
